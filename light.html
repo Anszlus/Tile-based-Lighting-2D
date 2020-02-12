@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>TileBase Light</title>
+</head>
+<body>
+
+<script type="text/javascript">
+/*
+@Author: Anszlus
+*/
+
+
+// tile width & height
+var tileW = 32;
+var tileH = 32;
+// map tile width & height
+var mapW = 35;
+var mapH = 25;
+// obstacles map
+var mapData = [
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+];
+
+
+class Player {
+	constructor(x, y) {
+		this.x = x;
+		this.y = y;
+	}
+}
+
+class LightSource {
+	constructor(id = (new Date).getTIme(), x, y, radius, intensity = 1) {
+		this.id = id; // object name
+		this.position = {x: x, y: y};
+		this.radius = radius;
+		this.intensity = intensity;
+		this.area = {};
+	}
+
+	calculate() {
+		// clear
+		this.area = {};
+		var edges = this.pointsOnCircumference();
+
+		for(var e in edges) {
+			var line = this.bresenhamsLine(this.position.x, this.position.y, edges[e][0], edges[e][1]);
+
+			// divided brightness into line lengths
+			var mult = this.intensity / line.length;
+
+			for(var l in line) {
+				if(line[l][0] < 0 || line[l][0] >= mapW || line[l][1] < 0 || line[l][1] >= mapH) {break;}
+
+				var idx = ((line[l][1]*mapW)+line[l][0]);
+				var strength = mult * (line.length - l);
+				
+				if(!(idx in this.area) || this.area[idx]<strength)
+				{
+					this.area[idx] = (strength > 1 ? 1 : strength);
+				}
+
+				// if we want obstacles to block the light
+				let a = line[l][0]
+				let b = line[l][1];
+				if(mapData[b][a]==1) { break; }
+
+			}
+		}
+
+	}
+
+	pointsOnCircumference(cx = this.position.x, cy = this.position.y, cr = this.radius) {
+
+		var list = new Array();
+
+		let x = cr;
+		let y = 0;
+		let o2 = Math.floor(1-x);
+
+		while(y <= x) {
+			list.push([ x + cx,  y + cy]);
+			list.push([ y + cx,  x + cy]);
+			list.push([-x + cx,  y + cy]);
+			list.push([-y + cx,  x + cy]);
+			list.push([-x + cx, -y + cy]);
+			list.push([-y + cx, -x + cy]);
+			list.push([ x + cx, -y + cy]);
+			list.push([ y + cx, -x + cy]);
+
+			y+= 1;
+
+			if(o2 <= 0) { o2+= (2 * y) + 1; }
+			else
+			{
+				x-= 1;
+				o2+= (2 * (y - x)) + 1;
+			}
+		}
+
+		return list;
+	}
+
+	bresenhamsLine(x1, y1, x2, y2) {
+		var line = new Array();
+		
+		var dx = Math.abs(x2 - x1);
+		var dy = Math.abs(y2 - y1);
+		
+		var sx = (x1 < x2 ? 1 : -1);
+		var sy = (y1 < y2 ? 1 : -1);
+		
+		var error = dx - dy;
+		
+		var x = x1, y = y1;
+		
+		while(!(x==x2 && y==y2))
+		{
+			line.push([x, y]);
+			
+			if(x==x2 && y==y2) { break; }
+			
+			var e2 = 2 * error;
+			
+			if(e2 >-dy) { error-= dy; x+= sx; }
+			if(e2 < dx) { error+= dx; y+= sy; }
+		}
+
+		return line;
+	}
+}
+
+
+class LightSystem {
+	constructor() {
+
+		this.canvas = document.createElement("canvas");
+		this.canvas.id = "lightSystem";
+		document.body.appendChild(this.canvas);
+		this.ctx = this.canvas.getContext('2d');
+		// minimum brightness on the map
+		this.baseLighting = 0.3;
+
+		// llight sources
+		this.ls = new Array();
+		this.lightMap = null;
+
+	}
+
+	addSource(id, x, y, r, i) {
+		let arrId = ( this.ls.push(new LightSource(id, x, y, r, i)) ) - 1;
+		this.ls[arrId].calculate();
+	}
+
+	selectSource(id) {
+		for (var i = 0; i < this.ls.length; i++)
+			if(this.ls[i].id == id) return i;
+		return null;
+	}
+
+	updateSource(id, x = null, y = null, radius = null, intensity = null) {
+		let i = this.selectSource(id);
+		if(i !== null) {
+			if(x !== null) this.ls[i].position.x = x;
+			if(y !== null) this.ls[i].position.y = y;
+			if(radius !== null) this.ls[i].radius = radius;
+			if(intensity !== null) this.ls[i].intensity = intensity;
+			this.ls[i].calculate();
+		}
+		else this.addSource(id, x, y, radius, intensity);
+	}
+
+	deleteSource(id) {
+		let i = this.selectSource(id);
+		if(i == null) { return; }
+		delete this.ls.splice(i);
+	}
+
+
+	display() {
+		if(this.ctx == null) {return;}
+
+		this.canvas.width = tileW * mapW;
+		this.canvas.height = tileH * mapH;
+		// Clear the Canvas
+		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+
+		// draw obstacles		
+		for (let y = 0; y < mapH; y++) {
+			for (let x = 0; x < mapW; x++) {
+				this.ctx.fillStyle = "#ff0000";
+				if(mapData[y][x] == 1) 
+					this.ctx.fillRect(x * tileW, y * tileH, tileW, tileH);
+			}
+		}
+
+
+		// draw lights and shadows
+		for (let y = 0; y < mapH; y++) {
+			for (let x = 0; x < mapW; x++) {
+				this.ctx.fillStyle = "#000";
+				this.ctx.globalAlpha = 1 - this.lightMap[x][y];
+				this.ctx.fillRect(x * tileW, y * tileH, tileW, tileH);
+			}
+		}
+	}
+
+	clearMap() {
+		this.lightMap = new Array();
+		for (let i = 0; i < mapW; i++) {
+			this.lightMap[i] = new Array(mapH);
+			for (let y = 0; y < mapH; y++) {
+				this.lightMap[i][y] = this.baseLighting;
+			} 
+		}
+	}
+
+
+	rebuildLightMap() {
+		this.clearMap();
+		
+		for(var l in this.ls)
+		{
+			for(var a in this.ls[l].area)
+			{
+				let y = a % mapW;
+				let x = Math.floor(a / mapW);
+				if(this.lightMap[y][x] < this.ls[l].area[a])
+				{
+					this.lightMap[y][x] = this.ls[l].area[a];
+				}
+			}
+		}
+	}
+}
+
+var light = new LightSystem();
+var p = new Player(20, 18);
+light.addSource('player', p.x, p.y, 9, 1);
+// light.rebuildLightMap();
+// light.display();
+
+
+setInterval(function(){
+	light.rebuildLightMap();
+	light.display();
+},200);
+
+document.addEventListener('keypress', logKey);
+
+function logKey(e) {
+  if(e.code == "KeyD") p.x+=1;
+  if(e.code == "KeyA") p.x-=1;
+  if(e.code == "KeyW") p.y-=1;
+  if(e.code == "KeyS") p.y+=1;
+  light.updateSource('player', p.x, p.y);
+}
+</script>
+</body>
+</html>
